@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+SECONDS=0
+
+echo "Preparing the Python environment with uv from the orb base image"
+python3 --version
+uv --version
+if [[ ! -x .venv/bin/python ]]; then
+  uv venv --python python3 .venv
+fi
+uv pip sync --python .venv/bin/python requirements.txt
+echo "Dependencies ready after ${SECONDS}s"
+
+echo "Checking imports and the offline protocol self-test"
+.venv/bin/python -c 'import bleak, serial'
+.venv/bin/python research_playground.py selftest
+echo "Setup finished after ${SECONDS}s. Use .venv/bin/python for repository commands."

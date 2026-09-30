@@ -77,6 +77,25 @@ in, `sync` to drain the historical flash properly, `live` to stream HR and motio
 `--force-optical` only if you mean it). Plus `battery`, `clock` / `set-clock`, `rename`,
 `haptic`, `alarm`, and `off` / `reboot` if the optical LED gets stuck on.
 
+## Work in an Amp orb
+
+`.agents/setup` uses Python 3 and `uv` from the orb base image to install the
+pinned Linux dependencies in `requirements.txt` into `.venv`. It also runs the
+offline self-test. Amp snapshots this environment for reuse by fresh orbs.
+`.agents/resume` checks imports without reinstalling dependencies.
+
+Use the prepared interpreter from the repository root:
+
+```bash
+.venv/bin/python research_playground.py selftest
+.venv/bin/python research_playground.py catalog
+```
+
+Orbs cannot access your local Bluetooth adapter or USB charger. Use offline
+decode and replay commands there; run hardware commands on a machine with the
+device attached. `decode_events.py` also needs a capture at `/tmp/events.json`,
+which setup does not create.
+
 ## How the band actually talks
 
 The full map is in `PROTOCOL.md`. The short version:

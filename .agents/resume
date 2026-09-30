@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# No services or authentication to restore; dependencies come from the snapshot.
+.venv/bin/python -c 'import bleak, serial'
+echo "Python environment ready. Use .venv/bin/python for repository commands."

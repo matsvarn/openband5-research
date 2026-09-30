@@ -1,0 +1,6 @@
+bleak==3.0.2
+dbus-fast==5.0.22
+    # via bleak
+pyserial==3.5
+typing-extensions==4.16.0
+    # via bleak
