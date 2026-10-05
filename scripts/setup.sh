@@ -11,7 +11,7 @@ done
 python3 --version
 uv --version
 if [[ ! -x .venv/bin/python ]]; then
-  uv venv --python python3 .venv
+  uv venv --no-python-downloads --python "$(command -v python3)" .venv
 fi
 uv pip sync --python .venv/bin/python requirements.txt
 .venv/bin/python -c 'import bleak, serial'
