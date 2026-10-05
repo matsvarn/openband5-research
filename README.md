@@ -77,10 +77,33 @@ in, `sync` to drain the historical flash properly, `live` to stream HR and motio
 `--force-optical` only if you mean it). Plus `battery`, `clock` / `set-clock`, `rename`,
 `haptic`, `alarm`, and `off` / `reboot` if the optical LED gets stuck on.
 
+## Work on macOS or Linux
+
+Install Python 3 and [uv](https://docs.astral.sh/uv/getting-started/installation/)
+on the execution host, then run:
+
+```bash
+bash scripts/setup.sh
+.venv/bin/python research_playground.py selftest
+```
+
+Setup syncs the pinned dependencies into this checkout's `.venv` and runs the
+offline self-test. `requirements.txt` includes platform markers for Linux D-Bus,
+macOS CoreBluetooth and Windows dependencies. Only macOS and Linux setup are
+verified here. Update direct pins in `requirements.in`, then regenerate with
+`uv pip compile --universal requirements.in -o requirements.txt`.
+
+For T3 Code, import the actions in `t3.json` for the selected project and machine.
+Setup runs automatically when a worktree is created and waits before the agent
+starts. Check runs the import check and offline self-test manually. Use a separate
+worktree for each task. Bluetooth adapters and serial chargers belong to the host
+running the command; connecting through SSH does not move them between machines.
+Only one task should access a physical band at a time. Keep captures outside Git.
+
 ## Work in an Amp orb
 
-`.agents/setup` uses Python 3 and `uv` from the orb base image to install the
-pinned Linux dependencies in `requirements.txt` into `.venv`. It also runs the
+`.agents/setup` calls the same setup script using Python 3 and `uv` from the
+orb base image. It installs the pinned dependencies into `.venv` and runs the
 offline self-test. Amp snapshots this environment for reuse by fresh orbs.
 `.agents/resume` checks imports without reinstalling dependencies.
 
